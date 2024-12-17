@@ -1,9 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
-	"encoding/json"
-	"log"
+	"io/ioutil"
 	"net/http"
 )
 
@@ -11,23 +11,31 @@ type response struct {
 	Name string `json:"name"`
 }
 
-func calculateHandler(w http.ResponseWriter, r *http.Request) {
-	result := response{}
-	result.Name = r.URL.Query().Get("name")
-	jsonOut, _ := json.Marshal(result)
-	log.Print(string([]byte(jsonOut)))
-	json.NewEncoder(w).Encode(jsonOut)
-	w.Write([]byte("Привет, мир!"))
-}
+func serveHandler(w http.ResponseWriter, r *http.Request) {
+	url := "http://localhost/"
+	fmt.Println("URL:>", url)
 
-func main() {
-	apiURL := "https://localhost/api/v1/calculate"
+	var jsonStr = []byte(`{"title":"Buy cheese and bread for breakfast."}`)
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+	req.Header.Set("X-Custom-Header", "myvalue")
+	req.Header.Set("Content-Type", "application/json")
 
-	resp, err := http.Post(apiURL, "application/json", nil)
+	client := &http.Client{}
+	resp, err := client.Do(req)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(resp.StatusCode)
-    fmt.Println(resp)
 	defer resp.Body.Close()
+
+	fmt.Println("response Status:", resp.Status)
+	fmt.Println("response Headers:", resp.Header)
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println("response Body:", string(body))
+	//w.Write([]byte("Привет, мир!"))
+}
+
+func main() {
+
+	http.HandleFunc("/api/v1/calculate", serveHandler)
+	http.ListenAndServe(":8080", nil)
 }
