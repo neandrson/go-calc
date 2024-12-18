@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/neandrson/go-calc/pkg/calculation"
 )
 
 type Config struct {
@@ -57,15 +59,15 @@ func ConfigFromEnv() *Config {
 func (a Application) Run() {
 	log.Println("input expression")
 	reader := bufio.NewReader(os.Stdin)
-	text, err := reader.ReadString("\n")
+	text, err := reader.ReadString('\n')
 	if err != nil {
-		log.Println("filed ti read expression from console")
+		log.Println("filed to read expression from console")
 	}
 
 	text = strings.TrimSpace(text)
 	if text == "exit" {
 		log.Println("application was successfully closed")
-		return nil
+		return
 	}
 
 	result, err := calculation.Calc(text)
