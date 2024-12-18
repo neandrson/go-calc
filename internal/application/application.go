@@ -44,14 +44,14 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if errors.Is(err, calculation.ErrInvalidExpression) {
 			fmt.Fprintf(w, "error: %s", err.Error())
-			w.WriteHeader(500)
+			//w.WriteHeader(500)
 		} else {
 			fmt.Fprintf(w, "error: unknow err")
-			w.WriteHeader(404)
+			//w.WriteHeader(404)
 		}
 	} else {
 		fmt.Fprintf(w, "result: %f", result)
-		w.WriteHeader(http.StatusOK)
+		//w.WriteHeader(http.StatusOK)
 	}
 }
 
@@ -87,6 +87,12 @@ func (a Application) Run() {
 }
 
 func (a *Application) RunServer() error {
+	fmt.Println("Starting server on port 8080...")
 	http.HandleFunc("/api/v1/calculate", CalcHandler)
-	return http.ListenAndServe(":"+a.config.Addr, nil) // curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type: application/json" --data "{\"expression\": \"2+2*2\"}"
+	err := http.ListenAndServe(":"+a.config.Addr, nil) // curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type: application/json" --data "{\"expression\": \"2+2*2\"}"
+	if err != nil {
+		//fmt.Println("Error starting server:", err)
+		return err
+	}
+	return nil
 }
