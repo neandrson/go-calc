@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/neandrson/go-calc/tree/main/internal/application"
+	"github.com/neandrson/go-calc/internal/application"
 )
 
 func main() {
