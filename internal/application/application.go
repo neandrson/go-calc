@@ -3,6 +3,7 @@ package application
 import (
 	"bufio"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -41,7 +42,12 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 
 	result, err := calculation.Calc(request.Expression)
 	if err != nil {
-		fmt.Fprintf(w, "err^ %s", err.Error())
+		if errors.Is(err, calculation.ErrInvalidExpression) {
+			fmt.Fprintf(w, "error: %s", err.Error())
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		} else {
+			fmt.Fprintf(w, "error: unknow err")
+		}
 	} else {
 		fmt.Fprintf(w, "result: %f", result)
 	}
@@ -79,6 +85,6 @@ func (a Application) Run() {
 }
 
 func (a *Application) RunServer() error {
-	http.HandleFunc("/", CalcHandler)
-	return http.ListenAndServe(":"+a.config.Addr, nil)
+	http.HandleFunc("/api/v1/calculate", CalcHandler)
+	return http.ListenAndServe(":"+a.config.Addr, nil) // curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type: application/json" --data "{\"expression\": \"2+2*2\"}"
 }
