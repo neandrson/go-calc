@@ -44,9 +44,10 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if errors.Is(err, calculation.ErrInvalidExpression) {
 			fmt.Fprintf(w, "error: %s", err.Error())
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			w.WriteHeader(http.StatusCreated)
 		} else {
 			fmt.Fprintf(w, "error: unknow err")
+			w.WriteHeader(http.StatusCreated)
 		}
 	} else {
 		fmt.Fprintf(w, "result: %f", result)
@@ -78,7 +79,7 @@ func (a Application) Run() {
 
 	result, err := calculation.Calc(text)
 	if err != nil {
-		fmt.Println(text, "calculation failed wit error", err)
+		fmt.Println(text, "calculation failed with error", err)
 	} else {
 		fmt.Println(text, "=", result)
 	}
