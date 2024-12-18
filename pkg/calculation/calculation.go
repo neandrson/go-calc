@@ -1,4 +1,4 @@
-package application
+package calculation
 
 import (
 	"fmt"
@@ -7,6 +7,24 @@ import (
 )
 
 var res, cal, sum int
+
+func stringToFloat64(str string) float64 {
+	degree := float64(1)
+	var res float64 = 0
+	var invers bool = false
+	for i := len(str); i > 0; i-- {
+		if str[i-1] == '-' {
+			invers = true
+		} else {
+			res += float64(9-int('9'-str[i-1])) * degree
+			degree *= 10
+		}
+	}
+	if invers {
+		res = 0 - res
+	}
+	return res
+}
 
 func Calc(expression string) (float64, error) {
 
