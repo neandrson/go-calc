@@ -2,8 +2,6 @@ package calculate_test
 
 import (
 	"testing"
-
-	"github.com/neandrson/Calc_prim/pkg/rpn"
 )
 
 func TestCalc(t *testing.T) {
