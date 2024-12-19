@@ -55,12 +55,12 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 				w.WriteHeader(500)
 			} else {
 				http.Error(w, "Internal server error", http.StatusInternalServerError)
-				//fmt.Fprintln(w, "error: unknow err", err.Error())
-				//w.WriteHeader(404)
+				fmt.Fprintln(w, "error: unknow err", err.Error())
+				w.WriteHeader(404)
 			}
 		} else {*/
 		//fmt.Fprintf(w, "result: %f", result)
-		http.Error(w, "Internal error", http.StatusUnauthorized)
+		http.Error(w, "Expression is not valid", http.StatusUnprocessableEntity)
 		return
 	}
 
