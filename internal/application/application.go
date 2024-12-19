@@ -46,11 +46,11 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "error: %s", err.Error())
 			//w.WriteHeader(500)
 		} else {
-			fmt.Fprintf(w, "error: unknow err")
+			fmt.Fprintln(w, "error: unknow err", err.Error())
 			//w.WriteHeader(404)
 		}
 	} else {
-		log.Println(w, "result: %f", result)
+		fmt.Fprintf(w, "result: %f", result)
 		//w.WriteHeader(http.StatusOK)
 	}
 }
@@ -91,7 +91,7 @@ func (a *Application) RunServer() error {
 	http.HandleFunc("/api/v1/calculate", CalcHandler)
 	err := http.ListenAndServe(":"+a.config.Addr, nil) // curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type: application/json" --data "{\"expression\": \"2+2*2\"}"
 	if err != nil {
-		//fmt.Println("Error starting server:", err)
+		fmt.Println("Error starting server:", err)
 		return err
 	}
 	return nil
