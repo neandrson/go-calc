@@ -10,3 +10,21 @@ Calculate with Web Interface
 пользователя, а затем выводить результат вычисления
 ```
 ---
+go-calc
+│
+├── cmd
+│ ├── main.go
+│ └── main_test.go
+│
+├── internal
+│ └── application
+│    ├── application.go
+│    └── application_test.go
+│
+├── pkg
+│ └── calculation
+│    ├── calculation.go
+│    └── calculation_test.go
+│
+├── go.mod
+└── README.md
