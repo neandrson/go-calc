@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-var res, cal, sum int
+//var res, cal, sum int
 
 func stringToFloat64(str string) float64 {
 	degree := float64(1)
@@ -105,7 +105,7 @@ func evaluatePostfix(postfix []string) (float64, error) {
 			stack = append(stack, num)
 		} else {
 			if len(stack) < 2 {
-				return 0, fmt.Errorf("Invalid expression")
+				return 0, err //fmt.Errorf("Invalid expression")
 			}
 
 			num2 := stack[len(stack)-1]
