@@ -3,11 +3,11 @@ package application
 import (
 	"bufio"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/neandrson/go-calc/pkg/calculation"
@@ -21,9 +21,9 @@ type Application struct {
 	config *Config
 }
 
-type Request struct {
+/*type Request struct {
 	Expression string `json: "expression"`
-}
+}*/
 
 func New() *Application {
 	return &Application{
@@ -32,31 +32,47 @@ func New() *Application {
 }
 
 func CalcHandler(w http.ResponseWriter, r *http.Request) {
+	var data map[string]string
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	request := new(Request)
+	//request := new(Request)
 	defer r.Body.Close()
-	err := json.NewDecoder(r.Body).Decode(&request)
+	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	result, err := calculation.Calc(request.Expression)
+	expression := data["expression"]
+
+	result, err := calculation.Calc(expression)
 	if err != nil {
-		if errors.Is(err, calculation.ErrInvalidExpression) {
-			fmt.Fprintf(w, "error: %s", err.Error())
-			//w.WriteHeader(500)
-		} else {
-			fmt.Fprintln(w, "error: unknow err", err.Error())
-			//w.WriteHeader(404)
-		}
-	} else {
+		/*if err.Is(err, calculation.ErrInvalidExpression) {
+				http.Error(w, "Internal server error", http.StatusInternalServerError)
+				//fmt.Fprintf(w, "error: %s", err.Error())
+				//w.WriteHeader(500)
+			} else {
+				http.Error(w, "Internal server error", http.StatusInternalServerError)
+				//fmt.Fprintln(w, "error: unknow err", err.Error())
+				//w.WriteHeader(404)
+			}
+		} else {*/
 		fmt.Fprintf(w, "result: %f", result)
 		//w.WriteHeader(http.StatusOK)
 	}
+
+	response := map[string]string{"result": strconv.FormatFloat(result, 'f', 6, 64)}
+	jsonResponse, err := json.Marshal(response)
+	if err != nil {
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(jsonResponse)
 }
 
 func ConfigFromEnv() *Config {
