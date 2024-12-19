@@ -51,16 +51,18 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		/*if err.Is(err, calculation.ErrInvalidExpression) {
 				http.Error(w, "Internal server error", http.StatusInternalServerError)
-				//fmt.Fprintf(w, "error: %s", err.Error())
-				//w.WriteHeader(500)
+				fmt.Fprintf(w, "error: %s", err.Error())
+				w.WriteHeader(500)
 			} else {
 				http.Error(w, "Internal server error", http.StatusInternalServerError)
 				//fmt.Fprintln(w, "error: unknow err", err.Error())
 				//w.WriteHeader(404)
 			}
 		} else {*/
-		fmt.Fprintf(w, "result: %f", result)
-		//w.WriteHeader(http.StatusOK)
+		//fmt.Fprintf(w, "result: %f", result)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(500)
+		return
 	}
 
 	response := map[string]string{"result": strconv.FormatFloat(result, 'f', 6, 64)}
