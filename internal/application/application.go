@@ -32,6 +32,10 @@ func New() *Application {
 }
 
 func CalcHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
 	request := new(Request)
 	defer r.Body.Close()
 	err := json.NewDecoder(r.Body).Decode(&request)
