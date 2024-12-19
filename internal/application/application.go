@@ -60,8 +60,7 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		} else {*/
 		//fmt.Fprintf(w, "result: %f", result)
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(501)
+		http.Error(w, "Internal error", http.StatusUnauthorized)
 		return
 	}
 
