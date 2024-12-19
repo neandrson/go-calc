@@ -49,7 +49,7 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 
 	result, err := calculation.Calc(expression)
 	if err != nil {
-		/*if err.Is(err, calculation.ErrInvalidExpression) {
+		/*if error.Is(err, calculation.ErrInvalidExpression) {
 				http.Error(w, "Internal server error", http.StatusInternalServerError)
 				fmt.Fprintf(w, "error: %s", err.Error())
 				w.WriteHeader(500)
@@ -60,6 +60,7 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		} else {*/
 		//fmt.Fprintf(w, "result: %f", result)
+
 		http.Error(w, "Expression is not valid", http.StatusUnprocessableEntity)
 		return
 	}
@@ -107,12 +108,17 @@ func (a Application) Run() {
 	}
 }
 
+func responseHandler(w http.ResponseWriter, r *http.Request) {
+	http.Error(w, "Internal server error", http.StatusInternalServerError)
+}
+
 func (a *Application) RunServer() error {
 	fmt.Println("Starting server on port 8080...")
+	http.HandleFunc("/", responseHandler)
 	http.HandleFunc("/api/v1/calculate", CalcHandler)
 	err := http.ListenAndServe(":"+a.config.Addr, nil) // curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type: application/json" --data "{\"expression\": \"2+2*2\"}"
 	if err != nil {
-		fmt.Println("Error starting server:", err)
+		fmt.Println(calculation.ErrInternalServer)
 		return err
 	}
 	return nil
