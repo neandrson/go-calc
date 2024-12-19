@@ -43,15 +43,15 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 	result, err := calculation.Calc(request.Expression)
 	if err != nil {
 		if errors.Is(err, calculation.ErrInvalidExpression) {
-			fmt.Fprintf(w, "error: %s", err.Error())
-			w.WriteHeader(500)
+			log.Print(w, "error: %s", err.Error())
+			//w.WriteHeader(500)
 		} else {
-			fmt.Fprintf(w, "error: unknow err")
-			w.WriteHeader(404)
+			log.Print(w, "error: unknow err")
+			//w.WriteHeader(404)
 		}
 	} else {
-		fmt.Fprintf(w, "result: %f", result)
-		w.WriteHeader(http.StatusOK)
+		log.Print(w, "result: %f", result)
+		//w.WriteHeader(http.StatusOK)
 	}
 }
 
