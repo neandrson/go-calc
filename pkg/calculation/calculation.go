@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-//var res, cal, sum int
+var res, cal, sum int
 
 func stringToFloat64(str string) float64 {
 	degree := float64(1)
