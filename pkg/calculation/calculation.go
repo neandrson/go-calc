@@ -8,7 +8,7 @@ import (
 
 var res, cal, sum int
 
-func stringToFloat64(str string) float64 {
+/*func stringToFloat64(str string) float64 {
 	degree := float64(1)
 	var res float64 = 0
 	var invers bool = false
@@ -24,7 +24,7 @@ func stringToFloat64(str string) float64 {
 		res = 0 - res
 	}
 	return res
-}
+}*/
 
 func Calc(expression string) (float64, error) {
 
@@ -50,10 +50,10 @@ func isValid(expression string) bool {
 	}
 	openCount := strings.Count(expression, "(")
 	closeCount := strings.Count(expression, ")")
-	if openCount != closeCount {
-		return false
-	}
-	return true
+	//if openCount != closeCount {
+	//	return false
+	//}
+	return openCount == closeCount
 }
 
 func infixToPostfix(expression string) []string {
@@ -121,9 +121,6 @@ func evaluatePostfix(postfix []string) (float64, error) {
 				stack = append(stack, num1*num2)
 			case "/":
 				stack = append(stack, num1/num2)
-			default:
-
-				return 0, fmt.Errorf("Неизвестный оператор")
 			}
 		}
 	}
