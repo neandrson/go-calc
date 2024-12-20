@@ -121,6 +121,9 @@ func evaluatePostfix(postfix []string) (float64, error) {
 				stack = append(stack, num1*num2)
 			case "/":
 				stack = append(stack, num1/num2)
+			default:
+
+				return 0, fmt.Errorf("Неизвестный оператор")
 			}
 		}
 	}
