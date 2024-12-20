@@ -30,7 +30,7 @@ func Calc(expression string) (float64, error) {
 
 	expression = strings.ReplaceAll(expression, " ", "")
 	if !isValid(expression) {
-		return 0, fmt.Errorf("invalid expression")
+		return 0, fmt.Errorf("Expression is not valid")
 	}
 	postfix := infixToPostfix(expression)
 	result, err := evaluatePostfix(postfix)
@@ -105,7 +105,7 @@ func evaluatePostfix(postfix []string) (float64, error) {
 			stack = append(stack, num)
 		} else {
 			if len(stack) < 2 {
-				return 0, err //fmt.Errorf("invalid expression")
+				return 0, fmt.Errorf("Expression is not valid")
 			}
 
 			num2 := stack[len(stack)-1]
