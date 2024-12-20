@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-var res, cal, sum int
+//var res, cal, sum int
 
 /*func stringToFloat64(str string) float64 {
 	degree := float64(1)
@@ -30,7 +30,7 @@ func Calc(expression string) (float64, error) {
 
 	expression = strings.ReplaceAll(expression, " ", "")
 	if !isValid(expression) {
-		return 0, fmt.Errorf("Invalid expression")
+		return 0, fmt.Errorf("invalid expression")
 	}
 	postfix := infixToPostfix(expression)
 	result, err := evaluatePostfix(postfix)
@@ -105,7 +105,7 @@ func evaluatePostfix(postfix []string) (float64, error) {
 			stack = append(stack, num)
 		} else {
 			if len(stack) < 2 {
-				return 0, err //fmt.Errorf("Invalid expression")
+				return 0, err //fmt.Errorf("invalid expression")
 			}
 
 			num2 := stack[len(stack)-1]
@@ -125,7 +125,7 @@ func evaluatePostfix(postfix []string) (float64, error) {
 		}
 	}
 	if len(stack) != 1 {
-		return 0, fmt.Errorf("Invalid expression")
+		return 0, fmt.Errorf("invalid expression")
 	}
 
 	return stack[0], nil
