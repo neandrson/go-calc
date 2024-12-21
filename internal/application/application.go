@@ -119,7 +119,7 @@ func (a *Application) RunServer() error {
 	http.HandleFunc("/api/v1/calculate", CalcHandler)
 	err := http.ListenAndServe(":"+a.config.Addr, nil) // curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type: application/json" --data "{\"expression\": \"2+2*2\"}"
 	if err != nil {
-		fmt.Println(calculation.ErrInternalServer)
+		fmt.Println("Internal server error")
 		return err
 	}
 	return nil
