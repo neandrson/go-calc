@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-
-	"github.com/neandrson/go-calc/pkg/calculation"
 )
 
 //var res, cal, sum int
@@ -32,7 +30,7 @@ func Calc(expression string) (float64, error) {
 
 	expression = strings.ReplaceAll(expression, " ", "")
 	if !isValid(expression) {
-		return 0, fmt.Errorf(calculation.ErrInvalidExpression)
+		return 0, fmt.Errorf(calculation.errors.ErrInvalidExpression)
 	}
 	postfix := infixToPostfix(expression)
 	result, err := evaluatePostfix(postfix)
