@@ -61,7 +61,7 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 		} else {*/
 		//fmt.Fprintf(w, "result: %f", result)
 
-		http.Error(w, "Expression is not valid", http.StatusUnprocessableEntity)
+		http.Error(w, calculation.ErrInvalidExpression, http.StatusUnprocessableEntity)
 		return
 	}
 
