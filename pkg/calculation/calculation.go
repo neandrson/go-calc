@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/neandrson/go-calc/pkg/calculation"
 )
 
 //var res, cal, sum int
@@ -105,7 +107,7 @@ func evaluatePostfix(postfix []string) (float64, error) {
 			stack = append(stack, num)
 		} else {
 			if len(stack) < 2 {
-				return 0, fmt.Errorf(calculation.ErrInvalidExpression)
+				return 0, fmt.Errorf(errors.)
 			}
 
 			num2 := stack[len(stack)-1]
