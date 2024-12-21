@@ -3,6 +3,7 @@
 
 # Структура проекта
 
+```go
 go-calc  
 │  
 ├── cmd  
@@ -19,7 +20,8 @@ go-calc
 │       └── calculation_test.go  
 │  
 ├── go.mod  
-└── README.md  
+└── README.md
+```
 
 ### Простой калькулятор на Go
 
