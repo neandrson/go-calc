@@ -61,14 +61,14 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 		} else {*/
 		//fmt.Fprintf(w, "result: %f", result)
 
-		http.Error(w, "internal server error", http.StatusUnprocessableEntity)
+		http.Error(w, "Expression is not valid", http.StatusUnprocessableEntity)
 		return
 	}
 
 	response := map[string]string{"result": strconv.FormatFloat(result, 'f', 6, 64)}
 	jsonResponse, err := json.Marshal(response)
 	if err != nil {
-		http.Error(w, "Expression is not valid", http.StatusInternalServerError)
+		http.Error(w, "internal server error", http.StatusInternalServerError)
 		return
 	}
 
