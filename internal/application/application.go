@@ -68,7 +68,7 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 	response := map[string]string{"result": strconv.FormatFloat(result, 'f', 6, 64)}
 	jsonResponse, err := json.Marshal(response)
 	if err != nil {
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		http.Error(w, calculation.ErrInvalidExpression, http.StatusInternalServerError)
 		return
 	}
 
@@ -119,7 +119,7 @@ func (a *Application) RunServer() error {
 	http.HandleFunc("/api/v1/calculate", CalcHandler)
 	err := http.ListenAndServe(":"+a.config.Addr, nil) // curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type: application/json" --data "{\"expression\": \"2+2*2\"}"
 	if err != nil {
-		fmt.Println("Internal server error")
+		fmt.Println(calculation.ErrInternalServer)
 		return err
 	}
 	return nil
