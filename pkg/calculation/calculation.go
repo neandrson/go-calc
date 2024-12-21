@@ -1,12 +1,13 @@
 package calculation
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
 )
 
-const ErrExpressionValid = "Expression is not valid"
+var ErrExpressionValid = errors.New("Expression is not valid")
 
 /*func stringToFloat64(str string) float64 {
 	degree := float64(1)
@@ -30,7 +31,7 @@ func Calc(expression string) (float64, error) {
 
 	expression = strings.ReplaceAll(expression, " ", "")
 	if !isValid(expression) {
-		return 0, fmt.Errorf("%s", ErrExpressionValid)
+		return 0, fmt.Errorf("%w", ErrExpressionValid)
 	}
 	postfix := infixToPostfix(expression)
 	result, err := evaluatePostfix(postfix)
@@ -105,7 +106,7 @@ func evaluatePostfix(postfix []string) (float64, error) {
 			stack = append(stack, num)
 		} else {
 			if len(stack) < 2 {
-				return 0, fmt.Errorf(ErrExpressionValid)
+				return 0, fmt.Errorf("%w", ErrExpressionValid)
 			}
 
 			num2 := stack[len(stack)-1]
@@ -121,14 +122,14 @@ func evaluatePostfix(postfix []string) (float64, error) {
 				stack = append(stack, num1*num2)
 			case "/":
 				if num2 == 0 {
-					return 0, fmt.Errorf(ErrExpressionValid)
+					return 0, fmt.Errorf("%w", ErrExpressionValid)
 				}
 				stack = append(stack, num1/num2)
 			}
 		}
 	}
 	if len(stack) != 1 {
-		return 0, fmt.Errorf(ErrExpressionValid)
+		return 0, fmt.Errorf("%w", ErrExpressionValid)
 	}
 
 	return stack[0], nil
