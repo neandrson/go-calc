@@ -44,8 +44,8 @@ func ConfigFromEnv() *Config {
 func CalcHandler(w http.ResponseWriter, r *http.Request) {
 	//var data map[string]string
 	if r.Method != http.MethodPost {
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		json.NewEncoder(w).Encode("Method not allowed")
+		//w.WriteHeader(http.StatusMethodNotAllowed)
+		//json.NewEncoder(w).Encode("Method not allowed")
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
@@ -60,16 +60,16 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 	var req Request
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		w.WriteHeader(http.StatusUnprocessableEntity)
-		json.NewEncoder(w).Encode("expression is not valid")
+		//w.WriteHeader(http.StatusUnprocessableEntity)
+		//json.NewEncoder(w).Encode("expression is not valid")
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	result, err := calculation.Calc(req.Expression)
 	if err != nil {
-		w.WriteHeader(http.StatusUnprocessableEntity)
-		json.NewEncoder(w).Encode(err.Error())
+		//w.WriteHeader(http.StatusUnprocessableEntity)
+		//json.NewEncoder(w).Encode(err.Error())
 		http.Error(w, "Expression is not valid", http.StatusUnprocessableEntity)
 		return
 	}
