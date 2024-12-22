@@ -7,7 +7,10 @@ import (
 	"strings"
 )
 
-var ErrExpressionValid = errors.New("Expression is not valid")
+var (
+	ErrUnmatchedParentheses = errors.New("unmatched parentheses")
+	ErrExpressionValid      = errors.New("expression is not valid")
+)
 
 /*func stringToFloat64(str string) float64 {
 	degree := float64(1)
@@ -31,7 +34,7 @@ func Calc(expression string) (float64, error) {
 
 	expression = strings.ReplaceAll(expression, " ", "") // удаление пробелов в выражении
 	if !isValid(expression) {
-		return 0, fmt.Errorf("%w", ErrExpressionValid)
+		return 0, fmt.Errorf("%w", ErrUnmatchedParentheses)
 	}
 	postfix := infixToPostfix(expression)
 	result, err := evaluatePostfix(postfix)
