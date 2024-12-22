@@ -21,9 +21,9 @@ type Application struct {
 	config *Config
 }
 
-/*type Request struct {
+type Request struct {
 	Expression string `json: "expression"`
-}*/
+}
 
 func New() *Application {
 	return &Application{
@@ -51,9 +51,12 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	defer r.Body.Close()
-	err := json.NewDecoder(r.Body).Decode(&data)
+	var req Request
+	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		w.WriteHeader(http.StatusUnprocessableEntity)
+		json.NewEncoder(w).Encode("Expression is not valid")
+		//http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
