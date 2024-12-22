@@ -28,14 +28,14 @@ func TestCalcHandler(t *testing.T) {
 			payload:    `{"expression": "2+abc"}`,
 			wantStatus: http.StatusUnprocessableEntity,
 			method:     http.MethodPost,
-			wantBody:   map[string]interface{}{"error": "invalid character"},
+			wantBody:   map[string]interface{}{"error": "expression is not valid"},
 		},
 		{
 			name:       "invalid json",
 			payload:    `{"expr`,
 			wantStatus: http.StatusUnprocessableEntity,
 			method:     http.MethodPost,
-			wantBody:   map[string]interface{}{"error": "Expression is not valid"},
+			wantBody:   map[string]interface{}{"error": "expression is not valid"},
 		},
 		{
 			name:       "empty request body",
