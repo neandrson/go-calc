@@ -105,12 +105,13 @@ func infixToPostfix(expression string) []string {
 		//for _, ch := range postfix {
 		postfix = nil
 		stack = nil
+		tokens = nil
 		fmt.Println(expression)
 		tokens := strings.Split(expression, "")
 		for _, token := range tokens {
 			stack = append(stack, token)
 		}
-
+		fmt.Println(stack)
 		return stack //, nil //0, fmt.Errorf("%w", ErrExpressionValid)
 		//}
 	}
