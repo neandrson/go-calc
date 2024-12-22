@@ -103,8 +103,8 @@ func infixToPostfix(expression string) []string {
 	}
 	if len(stack) < 2 {
 		//for _, ch := range postfix {
-		fmt.Println(stack)
-		return stack //, nil //0, fmt.Errorf("%w", ErrExpressionValid)
+		fmt.Println(postfix)
+		return postfix //, nil //0, fmt.Errorf("%w", ErrExpressionValid)
 		//}
 	}
 	//fmt.Println(postfix)
