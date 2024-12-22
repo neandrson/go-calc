@@ -107,7 +107,7 @@ func evaluatePostfix(postfix []string) (float64, error) {
 			stack = append(stack, num)
 		} else {
 			if len(stack) < 2 {
-				return 0, fmt.Errorf("%w", ErrExpressionValid)
+				return stack[0], nil //0, fmt.Errorf("%w", ErrExpressionValid)
 			}
 
 			num2 := stack[len(stack)-1]
