@@ -75,6 +75,7 @@ func infixToPostfix(expression string) []string {
 
 	tokens := strings.Split(expression, "")
 
+	fmt.Println(tokens)
 	for _, token := range tokens {
 		if token == "(" {
 			stack = append(stack, token)
