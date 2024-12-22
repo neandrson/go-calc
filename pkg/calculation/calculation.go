@@ -46,11 +46,6 @@ func Calc(expression string) (float64, error) {
 	return result, nil
 }
 
-func isDigit(expression string) bool {
-
-	return true
-}
-
 // Проверка на валидность выражения
 func isValid(expression string) bool {
 	validChars := "0123456789+-*/()"
@@ -136,7 +131,7 @@ func evaluatePostfix(postfix []string) (float64, error) {
 				stack = append(stack, num1*num2)
 			case "/":
 				if num2 == 0 {
-					return 0, fmt.Errorf("%w", ErrExpressionValid)
+					return 0, fmt.Errorf("%w", ErrDivisionByZero)
 				}
 				stack = append(stack, num1/num2)
 			}
