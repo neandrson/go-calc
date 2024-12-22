@@ -76,7 +76,9 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 		} else {*/
 		//fmt.Fprintf(w, "result: %f", result)
 
-		http.Error(w, "Expression is not valid", http.StatusUnprocessableEntity)
+		w.WriteHeader(http.StatusUnprocessableEntity)
+		json.NewEncoder(w).Encode(err.Error())
+		//http.Error(w, "Expression is not valid", http.StatusUnprocessableEntity)
 		return
 	}
 
