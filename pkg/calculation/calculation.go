@@ -34,11 +34,9 @@ func Calc(expression string) (float64, error) {
 
 	expression = strings.ReplaceAll(expression, " ", "") // удаление пробелов в выражении
 	if !isValid(expression) {
-		return 0, fmt.Errorf("%w", ErrUnmatchedParentheses)
-	}
-	if !isDigit(expression) {
 		return 0, fmt.Errorf("%w", ErrExpressionValid)
 	}
+
 	postfix := infixToPostfix(expression)
 	result, err := evaluatePostfix(postfix)
 	if err != nil {
@@ -48,17 +46,18 @@ func Calc(expression string) (float64, error) {
 }
 
 func isDigit(expression string) bool {
+
+	return true
+}
+
+// Проверка на валидность выражения
+func isValid(expression string) bool {
 	validChars := "0123456789+-*/()"
 	for _, char := range expression {
 		if !strings.Contains(validChars, string(char)) {
 			return false
 		}
 	}
-	return true
-}
-
-// Проверка на валидность выражения
-func isValid(expression string) bool {
 	openCount := strings.Count(expression, "(")
 	closeCount := strings.Count(expression, ")")
 	if openCount != closeCount {
@@ -107,6 +106,7 @@ func infixToPostfix(expression string) []string {
 		stack = stack[:len(stack)-1]
 	}
 
+	fmt.Println(postfix)
 	return postfix
 }
 
@@ -117,7 +117,7 @@ func evaluatePostfix(postfix []string) (float64, error) {
 			stack = append(stack, num)
 		} else {
 			if len(stack) < 2 {
-				if stack
+
 				fmt.Println(stack)
 				return stack[1] + stack[0], nil //0, fmt.Errorf("%w", ErrExpressionValid)
 			}
