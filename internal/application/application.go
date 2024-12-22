@@ -44,10 +44,12 @@ func ConfigFromEnv() *Config {
 func CalcHandler(w http.ResponseWriter, r *http.Request) {
 	var data map[string]string
 	if r.Method != http.MethodPost {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(w).Encode("Method not allowed")
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	//request := new(Request)
+
 	defer r.Body.Close()
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
