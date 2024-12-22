@@ -60,9 +60,9 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	expression := data["expression"]
+	//expression := data["expression"]
 
-	result, err := calculation.Calc(expression)
+	result, err := calculation.Calc(req.Expression)
 	if err != nil {
 		/*if error.Is(err, calculation.ErrInvalidExpression) {
 				http.Error(w, "Internal server error", http.StatusInternalServerError)
