@@ -101,7 +101,12 @@ func infixToPostfix(expression string) []string {
 		postfix = append(postfix, stack[len(stack)-1])
 		stack = stack[:len(stack)-1]
 	}
-
+	if len(stack) < 2 {
+		//for _, ch := range postfix {
+		fmt.Println(stack)
+		return stack //, nil //0, fmt.Errorf("%w", ErrExpressionValid)
+		//}
+	}
 	//fmt.Println(postfix)
 	return postfix
 }
@@ -112,12 +117,6 @@ func evaluatePostfix(postfix []string) (float64, error) {
 		if num, err := strconv.ParseFloat(token, 64); err == nil {
 			stack = append(stack, num)
 		} else {
-			if len(stack) < 2 {
-
-				fmt.Println(postfix)
-				return stack[0], nil //0, fmt.Errorf("%w", ErrExpressionValid)
-			}
-
 			num2 := stack[len(stack)-1]
 			num1 := stack[len(stack)-2]
 			stack = stack[:len(stack)-2]
