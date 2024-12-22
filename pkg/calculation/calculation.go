@@ -29,7 +29,7 @@ var ErrExpressionValid = errors.New("Expression is not valid")
 
 func Calc(expression string) (float64, error) {
 
-	expression = strings.ReplaceAll(expression, " ", "")
+	expression = strings.ReplaceAll(expression, " ", "") // удаление пробелов в выражении
 	if !isValid(expression) {
 		return 0, fmt.Errorf("%w", ErrExpressionValid)
 	}
@@ -41,6 +41,7 @@ func Calc(expression string) (float64, error) {
 	return result, nil
 }
 
+// Проверка на валидность выражения
 func isValid(expression string) bool {
 
 	validChars := "0123456789+-*/()"
@@ -57,6 +58,7 @@ func isValid(expression string) bool {
 	return openCount == closeCount
 }
 
+// определение приоритета выполнения выражения
 func infixToPostfix(expression string) []string {
 	var postfix []string
 	var stack []string
@@ -100,14 +102,13 @@ func infixToPostfix(expression string) []string {
 
 func evaluatePostfix(postfix []string) (float64, error) {
 	var stack []float64
-
 	for _, token := range postfix {
 		if num, err := strconv.ParseFloat(token, 64); err == nil {
 			stack = append(stack, num)
 		} else {
-			if len(stack) < 2 {
-				return 0, fmt.Errorf("%w", ErrExpressionValid)
-			}
+			//if len(stack) < 2 {
+			//	return 0, fmt.Errorf("%w", ErrExpressionValid)
+			//}
 
 			num2 := stack[len(stack)-1]
 			num1 := stack[len(stack)-2]
