@@ -24,7 +24,7 @@ func TestCalcHandler(t *testing.T) {
 			wantBody:   map[string]interface{}{"result": 4.0},
 		},
 		{
-			name:       "invalid character in expression",
+			name:       "expression is not valid",
 			payload:    `{"expression": "2+abc"}`,
 			wantStatus: http.StatusUnprocessableEntity,
 			method:     http.MethodPost,
