@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/neandrson/go-calc/pkg/calculation"
@@ -87,17 +88,17 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	/*response := map[string]string{"result": strconv.FormatFloat(result, 'f', 0, 64)}
+	response := map[string]string{"result": strconv.FormatFloat(result, 'f', 0, 64)}
 	jsonResponse, err := json.Marshal(response)
 	if err != nil {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 		return
-	}*/
+	}
 
 	log.Println("Expression:", req.Expression, " Result:", result)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	//w.Write(jsonResponse)
+	w.Write(jsonResponse)
 }
 
 func (a Application) Run() {
