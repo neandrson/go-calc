@@ -54,14 +54,14 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 		err := recover()
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode("Internal server error")
+			json.NewEncoder(w).Encode("internal server error")
 		}
 	}()
 	var req Request
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		w.WriteHeader(http.StatusUnprocessableEntity)
-		json.NewEncoder(w).Encode("Expression is not valid")
+		json.NewEncoder(w).Encode("expression is not valid")
 		//http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -70,18 +70,6 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 
 	result, err := calculation.Calc(req.Expression)
 	if err != nil {
-		/*if error.Is(err, calculation.ErrInvalidExpression) {
-				http.Error(w, "Internal server error", http.StatusInternalServerError)
-				fmt.Fprintf(w, "error: %s", err.Error())
-				w.WriteHeader(500)
-			} else {
-				http.Error(w, "Internal server error", http.StatusInternalServerError)
-				fmt.Fprintln(w, "error: unknow err", err.Error())
-				w.WriteHeader(404)
-			}
-		} else {*/
-		//fmt.Fprintf(w, "result: %f", result)
-
 		w.WriteHeader(http.StatusUnprocessableEntity)
 		json.NewEncoder(w).Encode(err.Error())
 		//http.Error(w, "Expression is not valid", http.StatusUnprocessableEntity)
