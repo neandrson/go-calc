@@ -10,6 +10,7 @@ import (
 var (
 	ErrUnmatchedParentheses = errors.New("unmatched parentheses")
 	ErrExpressionValid      = errors.New("expression is not valid")
+	ErrDivisionByZero       = errors.New("division by zero")
 )
 
 /*func stringToFloat64(str string) float64 {
