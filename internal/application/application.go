@@ -66,8 +66,6 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//expression := data["expression"]
-
 	result, err := calculation.Calc(req.Expression)
 	if err != nil {
 		w.WriteHeader(http.StatusUnprocessableEntity)
