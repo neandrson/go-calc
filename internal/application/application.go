@@ -46,7 +46,7 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		json.NewEncoder(w).Encode("Method not allowed")
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		//http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
