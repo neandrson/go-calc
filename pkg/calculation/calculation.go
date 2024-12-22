@@ -129,9 +129,9 @@ func evaluatePostfix(postfix []string) (float64, error) {
 			}
 		}
 	}
-	//if len(stack) != 1 {
-	//	return stack[0], nil //0, fmt.Errorf("%w", ErrExpressionValid)
-	//}
+	if len(stack) != 1 {
+		return 0, fmt.Errorf("%w", ErrExpressionValid)
+	}
 
 	return stack[0], nil
 }
