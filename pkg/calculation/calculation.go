@@ -101,10 +101,17 @@ func infixToPostfix(expression string) []string {
 		postfix = append(postfix, stack[len(stack)-1])
 		stack = stack[:len(stack)-1]
 	}
-	if len(stack) < 2 {
+	if len(postfix) < 2 {
 		//for _, ch := range postfix {
-		fmt.Println(postfix)
-		return postfix //, nil //0, fmt.Errorf("%w", ErrExpressionValid)
+		postfix = nil
+		stack = nil
+		fmt.Println(expression)
+		tokens := strings.Split(expression, "")
+		for _, token := range tokens {
+			stack = append(stack, token)
+		}
+
+		return stack //, nil //0, fmt.Errorf("%w", ErrExpressionValid)
 		//}
 	}
 	//fmt.Println(postfix)
