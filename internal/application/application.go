@@ -74,7 +74,7 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response := map[string]string{"result": strconv.FormatFloat(result, 'f', 1, 64)}
+	response := map[string]string{"result": strconv.FormatFloat(result, 'f', 0, 64)}
 	jsonResponse, err := json.Marshal(response)
 	if err != nil {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
