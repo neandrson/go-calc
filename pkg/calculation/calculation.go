@@ -76,7 +76,7 @@ func infixToPostfix(expression string) []string {
 
 	tokens := strings.Split(expression, "")
 
-	fmt.Println(tokens)
+	//fmt.Println(tokens)
 	for _, token := range tokens {
 		if token == "(" {
 			stack = append(stack, token)
@@ -102,7 +102,7 @@ func infixToPostfix(expression string) []string {
 		stack = stack[:len(stack)-1]
 	}
 
-	fmt.Println(postfix)
+	//fmt.Println(postfix)
 	return postfix
 }
 
@@ -115,7 +115,7 @@ func evaluatePostfix(postfix []string) (float64, error) {
 			if len(stack) < 2 {
 
 				fmt.Println(stack)
-				return stack[1] + stack[0], nil //0, fmt.Errorf("%w", ErrExpressionValid)
+				return stack[0], nil //0, fmt.Errorf("%w", ErrExpressionValid)
 			}
 
 			num2 := stack[len(stack)-1]
