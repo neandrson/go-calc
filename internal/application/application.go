@@ -31,6 +31,16 @@ func New() *Application {
 	}
 }
 
+// конфигурация сервера
+func ConfigFromEnv() *Config {
+	config := new(Config)
+	config.Addr = os.Getenv("PORT")
+	if config.Addr == "" {
+		config.Addr = "8080" // порт сервера
+	}
+	return config
+}
+
 func CalcHandler(w http.ResponseWriter, r *http.Request) {
 	var data map[string]string
 	if r.Method != http.MethodPost {
@@ -65,7 +75,7 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response := map[string]string{"result": strconv.FormatFloat(result, 'f', 6, 64)}
+	response := map[string]string{"result": strconv.FormatFloat(result, 'f', 0, 64)}
 	jsonResponse, err := json.Marshal(response)
 	if err != nil {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
@@ -75,15 +85,6 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(jsonResponse)
-}
-
-func ConfigFromEnv() *Config {
-	config := new(Config)
-	config.Addr = os.Getenv("PORT")
-	if config.Addr == "" {
-		config.Addr = "8080"
-	}
-	return config
 }
 
 func (a Application) Run() {
@@ -113,13 +114,13 @@ func responseHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *Application) RunServer() error {
-	fmt.Println("Starting server on port 8080...")
-	//log.Println("Starting server on port 8080...")
+	//fmt.Println("Starting server on port 8080...")
+	log.Println("Starting server on port 8080...")
 	http.HandleFunc("/", responseHandler)
 	http.HandleFunc("/api/v1/calculate", CalcHandler)
 	err := http.ListenAndServe(":"+a.config.Addr, nil) // curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type: application/json" --data "{\"expression\": \"2+2*2\"}"
 	if err != nil {
-		fmt.Println("Internal server error")
+		log.Println("Internal server error")
 		return err
 	}
 	return nil
