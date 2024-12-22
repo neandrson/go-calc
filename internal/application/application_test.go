@@ -28,7 +28,7 @@ func TestCalcHandler(t *testing.T) {
 			payload:    `{"expression": "2+abc"}`,
 			wantStatus: http.StatusUnprocessableEntity,
 			method:     http.MethodPost,
-			wantBody:   map[string]interface{}{"error": "Expression is not valid"},
+			wantBody:   map[string]interface{}{"error": "invalid character"},
 		},
 		{
 			name:       "invalid json",
@@ -42,7 +42,7 @@ func TestCalcHandler(t *testing.T) {
 			payload:    `{}`,
 			wantStatus: http.StatusUnprocessableEntity,
 			method:     http.MethodPost,
-			wantBody:   map[string]interface{}{"error": "Expression is not valid"},
+			wantBody:   map[string]interface{}{"error": "invalid expression"},
 		},
 		{
 			name:       "incorrect close-brackets",
