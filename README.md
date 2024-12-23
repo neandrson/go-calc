@@ -42,7 +42,6 @@ func ConfigFromEnv() *Config {
 }
 ```
 ---
-
 ### Предварительные требования
 
 Перед началом работы с проектом необходимо убедиться, что на вашем компьютере установлены следующие инструменты и компоненты:  
@@ -54,6 +53,7 @@ func ConfigFromEnv() *Config {
 #### Копирование проекта с GitHub  
 Для начала работы с проектом необходимо клонировать репозиторий на локальный компьютер, используя следующую команду в терминале:
 ---
+---
 ```go
 git clone https://github.com/neandrson/go-calc.git
 ```
@@ -63,6 +63,7 @@ git clone https://github.com/neandrson/go-calc.git
 go.mod: Определяет зависимости проекта модуля.  
 Чтобы установить все зависимости проекта, перейдите в директорию проекта, откройте в ней терминал и выполните команду:  
 ---
+---
 ```go
 go mod tidy
 ```
@@ -70,6 +71,7 @@ go mod tidy
 Эта команда скачает и установит все необходимые зависимости, указанные в файле go.mod.
 #### Инструкция по запуску  
 Для запуска приложения go-calc необходимо выполнить команду:  
+---
 ---
 ```go
 go run ./cmd/main.go
@@ -86,6 +88,7 @@ go run ./cmd/main.go
 #### Запуск вычисления  
 Для отправки вычислительной задачи на сервер калькулятора, используйте приложение ***curl*** в командной строке ОС Windows с запросом:
 ---
+---
 ```go
 curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type: application/json" --data "{ \"expression\": \"2+2*2\" }"
 ```
@@ -100,6 +103,7 @@ curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type:
 #### Успешный результат
 Запрос:
 ---
+---
 ```go
 {  
    "expression": "2+2*2"
@@ -108,20 +112,23 @@ curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type:
 ---
 Ответ:
 ---
+---
 ```go
 {
    "result": "6.000000"
 }
 ```
 ---
-
 #### Неверный запрос
 
 Запрос:
+---
 ```go
 curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type: application/json" --data "{ \"expression\": \"2+2+\" }"
 ```
+---
 Ответ:
+---
 ---
 ```go
 {
@@ -131,11 +138,13 @@ curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type:
 ---
 Запрос:
 ---
+---
 ```go
 curl --location "http://localhost:8080/" --header "Content-Type: application/json" --data "{ \\"expression\\": \\"2+2*2\\" }"
 ```
 ---
 Ответ:
+---
 ---
 ```go
 {
@@ -143,7 +152,6 @@ curl --location "http://localhost:8080/" --header "Content-Type: application/jso
 }
 ```
 ---
-
 Всего программа может возвращать 6 видов ошибок:
 
 <table>
