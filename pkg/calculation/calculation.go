@@ -2,122 +2,132 @@ package calculation
 
 import (
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
-var (
-	ErrUnmatchedParentheses = errors.New("unmatched parentheses")
-	ErrExpressionValid      = errors.New("expression is not valid")
-	ErrDivisionByZero       = errors.New("division by zero")
-)
-
+// Функция для вычисления выражения
 func Calc(expression string) (float64, error) {
-
-	expression = strings.ReplaceAll(expression, " ", "") // удаление пробелов в выражении
-	if !isValid(expression) {
-		return 0, fmt.Errorf("%w", ErrExpressionValid)
-	}
-
-	postfix := infixToPostfix(expression)
-	result, err := evaluatePostfix(postfix)
+	tokens, err := tokenize(expression)
 	if err != nil {
 		return 0, err
 	}
-	return result, nil
+
+	rpn, err := toRPN(tokens)
+	if err != nil {
+		return 0, err
+	}
+
+	return calculateRPN(rpn)
 }
 
-// Проверка на валидность выражения
-func isValid(expression string) bool {
-	validChars := "0123456789+-*/()"
-	for _, char := range expression {
-		if !strings.Contains(validChars, string(char)) {
-			return false
+// Функция для токенизации выражения. Берет строку с выражением и возвращает массив токенов или ошибку.
+func tokenize(expression string) ([]string, error) {
+	var tokens []string
+	var currentNumber string
+
+	expression = strings.Replace(expression, " ", "", -1)
+
+	for _, ch := range expression {
+		if unicode.IsDigit(ch) || ch == '.' {
+			currentNumber += string(ch)
+			continue
+		}
+
+		if currentNumber != "" {
+			tokens = append(tokens, currentNumber)
+			currentNumber = ""
+		}
+
+		if strings.Contains("+-*/()", string(ch)) {
+			tokens = append(tokens, string(ch))
+		} else if !unicode.IsDigit(ch) && ch != '.' {
+			return nil, errors.New("invalid character")
 		}
 	}
-	openCount := strings.Count(expression, "(")
-	closeCount := strings.Count(expression, ")")
-	if openCount != closeCount {
-		return false
+
+	if currentNumber != "" {
+		tokens = append(tokens, currentNumber)
 	}
-	return openCount == closeCount
+
+	return tokens, nil
 }
 
-// определение приоритета выполнения выражения
-func infixToPostfix(expression string) []string {
-	var postfix []string
+// Функция для преобразования токенов в обратную польскую нотацию
+func toRPN(tokens []string) ([]string, error) {
+	var rpn []string
 	var stack []string
 
-	precedence := map[string]int{
+	priority := map[string]int{
 		"+": 1,
 		"-": 1,
 		"*": 2,
 		"/": 2,
 	}
 
-	tokens := strings.Split(expression, "")
-
 	for _, token := range tokens {
-		if token == "(" {
+		if _, err := strconv.ParseFloat(token, 64); err == nil {
+			rpn = append(rpn, token)
+		} else if token == "(" {
 			stack = append(stack, token)
 		} else if token == ")" {
-			for stack[len(stack)-1] != "(" {
-				postfix = append(postfix, stack[len(stack)-1])
+			for len(stack) > 0 && stack[len(stack)-1] != "(" {
+				rpn = append(rpn, stack[len(stack)-1])
 				stack = stack[:len(stack)-1]
 			}
+			if len(stack) == 0 || stack[len(stack)-1] != "(" {
+				return nil, errors.New("unmatched parentheses")
+			}
 			stack = stack[:len(stack)-1]
-		} else if _, isOperator := precedence[token]; isOperator {
-			for len(stack) > 0 && precedence[stack[len(stack)-1]] >= precedence[token] {
-				postfix = append(postfix, stack[len(stack)-1])
+		} else {
+			for len(stack) > 0 && priority[stack[len(stack)-1]] >= priority[token] {
+				rpn = append(rpn, stack[len(stack)-1])
 				stack = stack[:len(stack)-1]
 			}
 			stack = append(stack, token)
-		} else {
-			postfix = append(postfix, token)
 		}
 	}
-
 	for len(stack) > 0 {
-		postfix = append(postfix, stack[len(stack)-1])
+		if stack[len(stack)-1] == "(" {
+			return nil, errors.New("unmatched parentheses")
+		}
+		rpn = append(rpn, stack[len(stack)-1])
 		stack = stack[:len(stack)-1]
 	}
-
-	return postfix
+	return rpn, nil
 }
 
-func evaluatePostfix(postfix []string) (float64, error) {
+// Функция для вычисления выражения в обратной польской нотации
+func calculateRPN(rpn []string) (float64, error) {
 	var stack []float64
 
-	for _, token := range postfix {
-		if num, err := strconv.ParseFloat(token, 64); err == nil {
-			stack = append(stack, num)
+	for _, token := range rpn {
+		if value, err := strconv.ParseFloat(token, 64); err == nil {
+			stack = append(stack, value)
 		} else {
 			if len(stack) < 2 {
-				return 0, fmt.Errorf("%w", ErrExpressionValid)
+				return 0, errors.New("invalid expression")
 			}
-			num2 := stack[len(stack)-1]
-			num1 := stack[len(stack)-2]
+			b, a := stack[len(stack)-1], stack[len(stack)-2]
 			stack = stack[:len(stack)-2]
-
 			switch token {
 			case "+":
-				stack = append(stack, num1+num2)
+				stack = append(stack, a+b)
 			case "-":
-				stack = append(stack, num1-num2)
+				stack = append(stack, a-b)
 			case "*":
-				stack = append(stack, num1*num2)
+				stack = append(stack, a*b)
 			case "/":
-				if num2 == 0 {
-					return 0, fmt.Errorf("%w", ErrDivisionByZero)
+				if b == 0 {
+					return 0, errors.New("division by zero")
 				}
-				stack = append(stack, num1/num2)
+				stack = append(stack, a/b)
 			}
 		}
 	}
 	if len(stack) != 1 {
-		return 0, fmt.Errorf("%w", ErrExpressionValid)
+		return 0, errors.New("invalid expression")
 	}
-
 	return stack[0], nil
 }
