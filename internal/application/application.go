@@ -75,15 +75,3 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(calculateResponse{Result: result})
 }
-
-func (a *Application) RunServer() error {
-	//fmt.Println("Starting server on port 8080...")
-	log.Println("Starting server on port 8080...")
-	http.HandleFunc("/api/v1/calculate", CalcHandler)
-	err := http.ListenAndServe(":"+a.config.Addr, nil) // curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type: application/json" --data "{\"expression\": \"2+2*2\"}"
-	if err != nil {
-		log.Println("Internal server error")
-		return err
-	}
-	return nil
-}
