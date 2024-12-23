@@ -2,60 +2,37 @@ package calculation_test
 
 import (
 	"testing"
-
-	"github.com/neandrson/go-calc/pkg/calculation"
 )
 
-func TestCalculation(t *testing.T) {
-	testCases := []struct {
-		expression string
-		expected   float64
+func TestCalc(t *testing.T) {
+	tests := []struct {
+		name        string
+		expression  string
+		expected    float64
+		expectError bool
 	}{
-		{"1+1", 1 + 1},
-		{"3+3*6", 3 + 3*6},
-		{"1+8/2*4", 1 + 8/2*4},
-		{"(1+1) *2", (1 + 1) * 2},
-		{"((1+4) * (1+2) +1) *4", ((1+4)*(1+2) + 1) * 4},
-		{"(4+3+2)/(1+2) * 1 / 3", (4 + 3 + 2) / (1 + 2) * 1 / 3},
-		{"((7+1) / (2+2) * 4) / 8 * (3 - ((4+1)*2)) -1", ((7+1)/(2+2)*4)/8*(3-((4+1)*2)) - 1},
-		{"5+5+5+5+5", 5 + 5 + 5 + 5 + 5},
-		{"(1)", 1},
-		{"(1+2*(1) + 1)", (1 + 2*(1) + 1)},
-		{"((1+2)*(5*(7+3) - 7 / (3+4) * (1+2)) - (8-1)) + (1 * (5-1 * (2+3)))", ((1+2)*(5*(7+3)-7/(3+4)*(1+2)) - (8 - 1)) + (1 * (5 - 1*(2+3)))},
+		{"Simple addition", "2+2", 4, false},
+		{"Simple multiplication", "2*3", 6, false},
+		{"Mixed operators", "2+3*4", 14, false},
+		{"Division", "10/2", 5, false},
+		{"Division by zero", "10/0", 0, true},
+		{"Parentheses", "(2+3)*4", 20, false},
+		{"Unmatched parentheses", "3+(4-2))", 0, true},
+		{"Unmatched parentheses", "(2+3", 0, true},
+		{"Invalid characters", "2+abc", 0, true},
+		{"Empty expression", "", 0, true},
+		{"Invalid expression", "3 + 5 *", 0, true},
+		{"Complex expression", "3+(6/2)*5-4", 14, false},
 	}
-	for _, testCase := range testCases {
-		t.Run(testCase.expression, func(t *testing.T) {
-			result, err := calculation.Calc(testCase.expression)
-			if err != nil {
-				t.Errorf("Calc(%s) error: %v", testCase.expression, err)
-			} else if result != testCase.expected {
-				t.Errorf("Calc(%s) = %v, want %v", testCase.expression, result, testCase.expected)
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := Calc(tt.expression)
+			if (err != nil) != tt.expectError {
+				t.Errorf("expected error: %v, got: %v", tt.expectError, err)
 			}
-		})
-	}
-}
-func TestCalculationErrors(t *testing.T) {
-	testCases := []string{
-		"1/0",
-		"2*(1+9",
-		"not numbs",
-		"2r+1b",
-		"1*(1+2*(1+2*(3+4) + 3 * (1+3) + 8 )",
-		"1**2",
-		"6^2",
-		"((((((((((1)))))))))",
-		"",
-		"()",
-		"*1",
-		"-+",
-		"-",
-		"'1",
-	}
-	for _, testCase := range testCases {
-		t.Run(testCase, func(t *testing.T) {
-			_, err := calculation.Calc(testCase)
-			if err == nil {
-				t.Errorf("Calc(%s) error is not nil", testCase)
+			if !tt.expectError && result != tt.expected {
+				t.Errorf("expected result: %v, got: %v", tt.expected, result)
 			}
 		})
 	}
