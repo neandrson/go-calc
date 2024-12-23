@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestCalcHandler(t *testing.T) {
+func TestCalculateHandler(t *testing.T) {
 	tests := []struct {
 		name       string
 		payload    string
@@ -21,14 +21,21 @@ func TestCalcHandler(t *testing.T) {
 			payload:    `{"expression": "2+2"}`,
 			wantStatus: http.StatusOK,
 			method:     http.MethodPost,
-			wantBody:   map[string]interface{}{"result": 4},
+			wantBody:   map[string]interface{}{"result": 4.0},
 		},
 		{
-			name:       "expression is not valid",
+			name:       "invalid character in expression",
 			payload:    `{"expression": "2+abc"}`,
 			wantStatus: http.StatusUnprocessableEntity,
 			method:     http.MethodPost,
-			wantBody:   map[string]interface{}{"error": "expression is not valid"},
+			wantBody:   map[string]interface{}{"error": "invalid character"},
+		},
+		{
+			name:       "invalid json",
+			payload:    `{"expr`,
+			wantStatus: http.StatusUnprocessableEntity,
+			method:     http.MethodPost,
+			wantBody:   map[string]interface{}{"error": "Expression is not valid"},
 		},
 		{
 			name:       "empty request body",
@@ -103,7 +110,7 @@ func TestConfigFromEnv(t *testing.T) {
 
 func TestNew(t *testing.T) {
 	app := New()
-	if app.config.Addr != "8080" {
-		t.Errorf("expected port 8080, got %s", app.config.Addr)
+	if app.Config.Addr != "8080" {
+		t.Errorf("expected port 8080, got %s", app.Config.Addr)
 	}
 }
