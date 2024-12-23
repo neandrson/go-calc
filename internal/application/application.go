@@ -48,7 +48,7 @@ type calculateResponse struct {
 }
 
 // Основная логика програамы. Принимает запросы, проверяет на ошибки и выдает ответ. Также добавлено логгирование для просмотра операций в терминале.
-func CalculateHandler(w http.ResponseWriter, r *http.Request) {
+func CalcHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		json.NewEncoder(w).Encode(calculateResponse{Error: "Method not allowed"})
@@ -74,4 +74,16 @@ func CalculateHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 
 	json.NewEncoder(w).Encode(calculateResponse{Result: result})
+}
+
+func (a *Application) RunServer() error {
+	//fmt.Println("Starting server on port 8080...")
+	log.Println("Starting server on port 8080...")
+	http.HandleFunc("/api/v1/calculate", CalcHandler)
+	err := http.ListenAndServe(":"+a.config.Addr, nil) // curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type: application/json" --data "{\"expression\": \"2+2*2\"}"
+	if err != nil {
+		log.Println("Internal server error")
+		return err
+	}
+	return nil
 }
