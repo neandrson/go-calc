@@ -97,6 +97,7 @@ curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type:
 #### Ограничения
 Калькулятор принимает числа от 1 до 9 включительно.   
 ### Примеры ответов  
+#### Успешный результат
 Запрос:
 ---
 ```go
@@ -113,26 +114,21 @@ curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type:
 }
 ```
 ---
-и ответ сервера кодом 200, если выражение вычислено успешно.
+
+#### Неверный запрос
 
 Запрос:
----
 ```go
-{  
-   "expression": "2+2*2a"  
-}
+curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type: application/json" --data "{ \"expression\": \"2+2+\" }"
 ```
----
 Ответ:
 ---
 ```go
 {
-   "error": "Expression is not valid"  
+   "error": "invalid expression"
 }
 ```
 ---
-и ответ сервера кодом 422, если входные данные не соответствуют требованиям приложения.
-
 Запрос:
 ---
 ```go
@@ -147,4 +143,54 @@ curl --location "http://localhost:8080/" --header "Content-Type: application/jso
 }
 ```
 ---
-и ответ сервера кодом 500 в случае какой-либо иной ошибки («Что-то пошло не так»). Например, не правильно указан адресс сайта для запроса.
+
+Всего программа может возвращать 6 видов ошибок:
+
+<table>
+	<thead>
+		<tr>
+			<th>№</th>
+			<th>Пример тела запроса/Метод запроса</th>
+			<th>Ответ сервера</th>
+			<th>Описание ошибки</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>1</td>
+			<td>{"expression": "2+abc"}/POST</td>
+			<td>invalid character</td>
+			<td>В выражении присутствуют недопустимые символы.</td>
+		</tr>
+		<tr>
+			<td>2</td>
+			<td>{"expression": "2+3)"}/POST</td>
+			<td>unmatched parentheses</td>
+			<td>В выражении присутствует открывающая или закрывающая скобка без пары.</td>
+		</tr>
+		<tr>
+			<td>3</td>
+			<td>{"expression": "2/0"}/POST</td>
+			<td>division by zero</td>
+			<td>Попытка деления на ноль.</td>
+		</tr>
+		<tr>
+			<td>4</td>
+			<td>{"expression": "2+2"}/GET</td>
+			<td>method not allowed</td>
+			<td>Неверный HTTP-метод (должен быть POST).</td>
+		</tr>
+		<tr>
+			<td>5</td>
+			<td>{"express"/POST</td>
+			<td>expression is not valid</td>
+			<td>Неверный формат тела запроса.</td>
+		</tr>
+		<tr>
+			<td>6</td>
+			<td>{"expression": "2+"}/POST</td>
+			<td>invalid expression</td>
+			<td>Некорректное выражение.</td>
+		</tr>
+	</tbody>
+</table>
