@@ -83,17 +83,24 @@ curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type:
 В запросе должны использоваться арифметические выражения с арабскими числами.  
 #### Формат ввода  
 Калькулятор поддерживает следующие операторы: ***"+", "-", "\*", "/"***, а также приоритеты вычисления с поддержкой ***"(", ")"***.
-#### Ограничения
-Калькулятор принимает числа от 1 до 9 включительно.   
+#### Запуск тестов  
+Запуск теста из папки модуля используется:
+```go
+go test -v
+```
+Запуск всех тестов используйте:
+```go
+go test -v ./...
+```
 ### Примеры ответов  
 #### Успешный результат
-Запрос:
+**Запрос:**
 ```go
 {  
    "expression": "2+2*2"
 }
 ```
-Ответ:
+**Ответ:**
 ```go
 {
    "result": "6.000000"
@@ -101,22 +108,21 @@ curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type:
 ```
 
 #### Неверный запрос
-Запрос:
+**Запрос:**
 ```go
 curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type: application/json" --data "{ \"expression\": \"2+2+\" }"
 ```
-Ответ:
+**Ответ:**
 ```go
 {
    "error": "invalid expression"
 }
 ```
-Запрос:
----
+**Запрос:**
 ```go
 curl --location "http://localhost:8080/" --header "Content-Type: application/json" --data "{ \"expression\": \"2+2*2\" }"
 ```
-Ответ:
+**Ответ:**
 ```go
 {
    "error": "Internal server error"
