@@ -50,7 +50,7 @@ func ConfigFromEnv() *Config {
 #### Копирование проекта с GitHub  
 Для начала работы с проектом необходимо клонировать репозиторий на локальный компьютер, используя следующую команду в терминале:
 ```go
-go git clone https://github.com/neandrson/go-calc.git  
+git clone https://github.com/neandrson/go-calc.git  
 cd go-calc
 ```
 После клонирования репозитория, перейдите в папку проекта для выполнения последующих команд.
