@@ -94,13 +94,13 @@ go test -v ./...
 ```
 ### Примеры ответов  
 #### Успешный результат
-Запрос:
+**Запрос:**
 ```go
 {  
    "expression": "2+2*2"
 }
 ```
-Ответ:
+**Ответ:**
 ```go
 {
    "result": "6.000000"
@@ -108,22 +108,21 @@ go test -v ./...
 ```
 
 #### Неверный запрос
-Запрос:
+**Запрос:**
 ```go
 curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type: application/json" --data "{ \"expression\": \"2+2+\" }"
 ```
-Ответ:
+**Ответ:**
 ```go
 {
    "error": "invalid expression"
 }
 ```
-Запрос:
----
+**Запрос:**
 ```go
 curl --location "http://localhost:8080/" --header "Content-Type: application/json" --data "{ \"expression\": \"2+2*2\" }"
 ```
-Ответ:
+**Ответ:**
 ```go
 {
    "error": "Internal server error"
