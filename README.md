@@ -32,6 +32,7 @@ go-calc
 
 Для смены порта необходимо изменить переменную *config.Addr* в методе *application*:
 
+---
 ```go
 func ConfigFromEnv() *Config {
     config := new(Config)  
@@ -42,6 +43,7 @@ func ConfigFromEnv() *Config {
     return config  
 }
 ```
+---
 
 ### Предварительные требования
 
@@ -54,22 +56,29 @@ func ConfigFromEnv() *Config {
 #### Копирование проекта с GitHub  
 
 Для начала работы с проектом необходимо клонировать репозиторий на локальный компьютер, используя следующую команду в терминале:
+---
 ```go
-git clone https://github.com/neandrson/go-calc.git
+git clone https://github.com/neandrson/go-calc.git  
+cd calculator-service
 ```
+---
 После клонирования репозитория, перейдите в папку проекта для выполнения последующих команд.
 #### Установка зависимостей  
 go.mod: Определяет зависимости проекта модуля.  
 Чтобы установить все зависимости проекта, перейдите в директорию проекта, откройте в ней терминал и выполните команду:  
+---
 ```go
 go mod tidy
 ```
+---
 Эта команда скачает и установит все необходимые зависимости, указанные в файле go.mod.
 #### Инструкция по запуску  
 Для запуска приложения go-calc необходимо выполнить команду:  
+---
 ```go
 go run ./cmd/main.go
 ```
+---
 После успешного запуска сервера в терминале появится сообщение: "Starting server on port 8080...".
 #### Описание методов  
 ##### ***Метод application***  
@@ -78,9 +87,11 @@ go run ./cmd/main.go
 Метод *calculation* обрабатывает вычислительные задачи, отправленные *application*. Он предоставляет API для приема и выполнения вычислений.
 #### Запуск вычисления  
 Для отправки вычислительной задачи на сервер калькулятора, используйте приложение ***curl*** в командной строке ОС Windows с запросом:
+---
 ```go
 curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type: application/json" --data "{ \"expression\": \"2+2*2\" }"
 ```
+---
 Для передачи выражения используется POST запрос.  
 В запросе должны использоваться арифметические выражения с арабскими числами.  
 #### Формат ввода  
@@ -90,40 +101,52 @@ curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type:
 ### Примеры ответов  
 #### Успешный результат
 Запрос:
+---
 ```go
 {  
    "expression": "2+2*2"
 }
 ```
+---
 Ответ:
+---
 ```go
 {
    "result": "6.000000"
 }
 ```
+---
 
 #### Неверный запрос
 Запрос:
+---
 ```go
 curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type: application/json" --data "{ \"expression\": \"2+2+\" }"
 ```
+---
 Ответ:
+---
 ```go
 {
    "error": "invalid expression"
 }
 ```
+---
 
 Запрос:
+---
 ```go
 curl --location "http://localhost:8080/" --header "Content-Type: application/json" --data "{ \\"expression\\": \\"2+2*2\\" }"
 ```
+---
 Ответ:
+---
 ```go
 {
    "error": "Internal server error"
 }
 ```
+---
 Всего программа может возвращать 6 видов ошибок:
 
 <table>
