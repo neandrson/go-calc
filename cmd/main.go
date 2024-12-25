@@ -12,6 +12,7 @@ func main() {
 
 	mux := http.NewServeMux()
 
+	mux.HandleFunc("/", application.ServerHandler)
 	mux.HandleFunc("/api/v1/calculate", application.CalcHandler)
 
 	log.Println("Starting server on port", app.Config.Addr)
