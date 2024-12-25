@@ -118,16 +118,6 @@ curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type:
    "error": "invalid expression"
 }
 ```
-**Запрос:**
-```go
-curl --location "http://localhost:8080/" --header "Content-Type: application/json" --data "{ \"expression\": \"2+2*2\" }"
-```
-**Ответ:**
-```go
-{
-   "error": "Internal server error"
-}
-```
 Всего программа может возвращать 6 видов ошибок:
 
 <table>
