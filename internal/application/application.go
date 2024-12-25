@@ -75,3 +75,8 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(calculateResponse{Result: result})
 }
+
+func ServerHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusInternalServerError)
+	json.NewEncoder(w).Encode(calculateResponse{Error: "Internal Server Error"})
+}
